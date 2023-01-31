@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "GrpcServiceTorneo.Protos";
+
+package TorneoBP;
+
+service ImagenBP{
+	rpc UploadImage(ImageRequest) returns (MensajeRequest);
+	rpc UpdateImage(ImageUpdateRequest) returns (MensajeRequest);
+}
+
+message ImageRequest{
+	bytes image = 1;
+	string extension = 2;
+}
+
+message MensajeRequest{
+	string ruta = 1;
+}
+
+message ImageUpdateRequest{
+	bytes image = 1;
+	string nombreArchivo = 2;
+	string nuevaExtension = 3;
+}

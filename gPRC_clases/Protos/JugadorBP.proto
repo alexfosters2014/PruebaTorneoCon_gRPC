@@ -1,0 +1,29 @@
+syntax = "proto3";
+import "google/protobuf/timestamp.proto";
+
+
+option csharp_namespace = "GrpcServiceTorneo.Protos";
+
+
+package TorneoBP;
+
+service JugadorBF {
+  rpc GetJugador (JugadorCedulaRequest) returns (JugadorReply);
+  rpc NuevoJugador (JugadorReply) returns (JugadorIdRequest);
+}
+
+message JugadorCedulaRequest{
+	string Cedula = 1;
+}
+
+message JugadorIdRequest{
+	int32 Id = 1;
+}
+
+message JugadorReply{
+    int32 Id = 1;
+    string Cedula = 2;
+    string Nombres = 3;
+    string Apellidos = 4;
+    google.protobuf.Timestamp FechaNacimiento = 5;
+}

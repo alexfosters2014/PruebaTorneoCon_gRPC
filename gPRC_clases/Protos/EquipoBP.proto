@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+import "Protos/JugadorBP.proto";
+import "google/protobuf/timestamp.proto";
+
+
+option csharp_namespace = "GrpcServiceTorneo.Protos";
+
+package TorneoBP;
+
+
+service EquipoBP {
+  rpc GetEquipo (EquipoIdRequest) returns (EquipoReply);
+  rpc NewEquipo (EquipoReply) returns (NuevoEquipoConfirmReply);
+}
+
+message EquipoIdRequest{
+
+	int32 Id = 1;
+}
+
+message EquipoReply{
+	int32 Id = 1;
+	string NombreEquipo = 2;
+	string Caratula = 3;
+	repeated JugadorReply Jugadores = 4;
+}
+
+message NuevoEquipoConfirmReply{
+	bool ok = 1;
+}
