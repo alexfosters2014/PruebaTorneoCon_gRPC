@@ -77,9 +77,9 @@ namespace GrpcServiceTorneo.Services
                 };
 
                 return await Task.FromResult(result);
-            }catch (Exception ex)
+            }catch (RpcException ex)
             {
-                throw new Exception(ex.Message);
+                throw new RpcException(new Status(StatusCode.NotFound, ex.Message));
             }
         }
 

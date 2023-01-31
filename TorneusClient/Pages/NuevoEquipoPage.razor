@@ -80,7 +80,7 @@
         }
         catch (Exception ex)
         {
-            
+
             throw;
         }
 
@@ -101,7 +101,7 @@
         if (result.Confirmed)
         {
             var jugador = (JugadorReply)result.Data;
-            Equipo.Jugadores.Add(jugador);
+           await AgregarJugador(jugador);
         }
     }
 
@@ -110,7 +110,16 @@
         VisualizarAgregarJugador = false;
         if (jugadorAsignado != null)
         {
-            Equipo.Jugadores.Add(jugadorAsignado);
+            int repetido = Equipo.Jugadores.Count(c => c.Id == jugadorAsignado.Id);
+            if (repetido == 0)
+            {
+                Equipo.Jugadores.Add(jugadorAsignado);
+            }
+            else
+            {
+                toast.ShowWarning("El jugador está repetido");
+            }
+
         }
     }
 

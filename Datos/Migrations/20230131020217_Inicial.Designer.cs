@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Datos.Migrations
 {
     [DbContext(typeof(TorneoBDContext))]
-    [Migration("20230131005149_Inicial")]
+    [Migration("20230131020217_Inicial")]
     partial class Inicial
     {
         /// <inheritdoc />
@@ -85,9 +85,6 @@ namespace Datos.Migrations
                     b.Property<string>("Cedula")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("EquipoId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("FechaNacimiento")
                         .HasColumnType("datetime2");
 
@@ -95,8 +92,6 @@ namespace Datos.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("EquipoId");
 
                     b.ToTable("Jugadores");
                 });
@@ -185,6 +180,21 @@ namespace Datos.Migrations
                     b.ToTable("Contadores");
                 });
 
+            modelBuilder.Entity("EquipoJugador", b =>
+                {
+                    b.Property<int>("EquiposId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("JugadoresId")
+                        .HasColumnType("int");
+
+                    b.HasKey("EquiposId", "JugadoresId");
+
+                    b.HasIndex("JugadoresId");
+
+                    b.ToTable("EquipoJugador");
+                });
+
             modelBuilder.Entity("EquipoTorneo", b =>
                 {
                     b.Property<int>("EquiposInscriptosId")
@@ -209,13 +219,6 @@ namespace Datos.Migrations
                     b.Navigation("Equipo");
                 });
 
-            modelBuilder.Entity("Datos.Jugador", b =>
-                {
-                    b.HasOne("Datos.Equipo", null)
-                        .WithMany("Jugadores")
-                        .HasForeignKey("EquipoId");
-                });
-
             modelBuilder.Entity("Datos.Partido", b =>
                 {
                     b.HasOne("Datos.EquipoPartido", "EquipoLocal")
@@ -237,6 +240,21 @@ namespace Datos.Migrations
                     b.Navigation("Torneo");
                 });
 
+            modelBuilder.Entity("EquipoJugador", b =>
+                {
+                    b.HasOne("Datos.Equipo", null)
+                        .WithMany()
+                        .HasForeignKey("EquiposId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Datos.Jugador", null)
+                        .WithMany()
+                        .HasForeignKey("JugadoresId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("EquipoTorneo", b =>
                 {
                     b.HasOne("Datos.Equipo", null)
@@ -250,11 +268,6 @@ namespace Datos.Migrations
                         .HasForeignKey("TorneosId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Datos.Equipo", b =>
-                {
-                    b.Navigation("Jugadores");
                 });
 
             modelBuilder.Entity("Datos.Torneo", b =>

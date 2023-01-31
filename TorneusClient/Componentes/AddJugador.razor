@@ -1,4 +1,5 @@
 ﻿@using Google.Protobuf.WellKnownTypes;
+@using Grpc.Core;
 @inject JugadorService jugadorService;
 @inject IToastService toastService
 
@@ -57,7 +58,7 @@
     async Task CrearNuevo()
     {
         //controlar si es mayor de edad
-        JugadorAsignado.FechaNacimiento = Timestamp.FromDateTime(fechaNacimiento);
+        JugadorAsignado.FechaNacimiento = Timestamp.FromDateTime(DateTime.SpecifyKind(fechaNacimiento, DateTimeKind.Utc));
         try
         {
             var nuevoJugador = await jugadorService.AddNuevoJugador(JugadorAsignado);
@@ -66,7 +67,7 @@
 
             await AsignarAEquipo();
         }
-        catch (Exception ex)
+        catch (RpcException ex)
         {
             throw new Exception(ex.Message);
         }
