@@ -4,6 +4,7 @@ using Datos;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Datos.Migrations
 {
     [DbContext(typeof(TorneoBDContext))]
-    partial class TorneoBDContextModelSnapshot : ModelSnapshot
+    [Migration("20230205162624_Inicial")]
+    partial class Inicial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -149,6 +152,9 @@ namespace Datos.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("EquipoPartidoId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Lugar")
                         .HasColumnType("nvarchar(max)");
 
@@ -162,6 +168,8 @@ namespace Datos.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("EquipoPartidoId");
 
                     b.ToTable("Torneos");
                 });
@@ -234,6 +242,13 @@ namespace Datos.Migrations
                     b.Navigation("Torneo");
                 });
 
+            modelBuilder.Entity("Datos.Torneo", b =>
+                {
+                    b.HasOne("Datos.EquipoPartido", null)
+                        .WithMany("Torneos")
+                        .HasForeignKey("EquipoPartidoId");
+                });
+
             modelBuilder.Entity("EquipoJugador", b =>
                 {
                     b.HasOne("Datos.Equipo", null)
@@ -247,6 +262,11 @@ namespace Datos.Migrations
                         .HasForeignKey("JugadoresId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Datos.EquipoPartido", b =>
+                {
+                    b.Navigation("Torneos");
                 });
 
             modelBuilder.Entity("Datos.Torneo", b =>

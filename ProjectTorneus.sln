@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Datos", "Datos\Datos.csproj
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "gPRC_clases", "gPRC_clases\gPRC_clases.csproj", "{9B07BB9F-C4DB-4016-825D-57DC17DFB4B0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Util", "Util\Util.csproj", "{8217A870-CB50-4ADB-BF5C-A72A9EA5979A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Util", "Util\Util.csproj", "{8217A870-CB50-4ADB-BF5C-A72A9EA5979A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

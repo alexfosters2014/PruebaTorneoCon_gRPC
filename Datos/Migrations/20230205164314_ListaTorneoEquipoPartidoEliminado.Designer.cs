@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Datos.Migrations
 {
     [DbContext(typeof(TorneoBDContext))]
-    [Migration("20230131020217_Inicial")]
-    partial class Inicial
+    [Migration("20230205164314_ListaTorneoEquipoPartidoEliminado")]
+    partial class ListaTorneoEquipoPartidoEliminado
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -39,7 +39,12 @@ namespace Datos.Migrations
                     b.Property<string>("NombreEquipo")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("TorneoId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("TorneoId");
 
                     b.ToTable("Equipos");
                 });
@@ -195,19 +200,11 @@ namespace Datos.Migrations
                     b.ToTable("EquipoJugador");
                 });
 
-            modelBuilder.Entity("EquipoTorneo", b =>
+            modelBuilder.Entity("Datos.Equipo", b =>
                 {
-                    b.Property<int>("EquiposInscriptosId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TorneosId")
-                        .HasColumnType("int");
-
-                    b.HasKey("EquiposInscriptosId", "TorneosId");
-
-                    b.HasIndex("TorneosId");
-
-                    b.ToTable("EquipoTorneo");
+                    b.HasOne("Datos.Torneo", null)
+                        .WithMany("EquiposInscriptos")
+                        .HasForeignKey("TorneoId");
                 });
 
             modelBuilder.Entity("Datos.EquipoPartido", b =>
@@ -255,23 +252,10 @@ namespace Datos.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("EquipoTorneo", b =>
-                {
-                    b.HasOne("Datos.Equipo", null)
-                        .WithMany()
-                        .HasForeignKey("EquiposInscriptosId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Datos.Torneo", null)
-                        .WithMany()
-                        .HasForeignKey("TorneosId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Datos.Torneo", b =>
                 {
+                    b.Navigation("EquiposInscriptos");
+
                     b.Navigation("Fixture");
                 });
 #pragma warning restore 612, 618

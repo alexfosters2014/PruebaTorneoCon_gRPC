@@ -31,25 +31,35 @@ namespace GrpcServiceTorneo.Services
 
         public async override Task<NuevoEquipoConfirmReply> NewEquipo(EquipoReply request, ServerCallContext context)
         {
-            if (request == null) throw new RpcException(new Status(StatusCode.NotFound, "El Equipo está vacio"));
-
-            Equipo NuevoEquipo = _mapper.Map<EquipoReply, Equipo>(request);
-
-            foreach (var jugador in NuevoEquipo.Jugadores)
+            try
             {
-                _db.Entry(jugador).State = EntityState.Unchanged;
+                if (request == null) throw new RpcException(new Status(StatusCode.NotFound, "El Equipo está vacio"));
+
+                Equipo NuevoEquipo = _mapper.Map<EquipoReply, Equipo>(request);
+
+                foreach (var jugador in NuevoEquipo.Jugadores)
+                {
+                    _db.Entry(jugador).State = EntityState.Modified;
+                }
+
+                var guardado = await _db.Equipos.AddAsync(NuevoEquipo);
+
+                await _db.SaveChangesAsync();
+
+                var result = new NuevoEquipoConfirmReply()
+                {
+                    Ok = true
+                };
+
+                return await Task.FromResult(result);
             }
-
-            var guardado =  await _db.Equipos.AddAsync(NuevoEquipo);
-
-            await _db.SaveChangesAsync();
-
-            var result = new NuevoEquipoConfirmReply()
+            catch (Exception ex)
             {
-                Ok = true
-            };
 
-            return await Task.FromResult(result);
+                throw new Exception(ex.Message);
+            }
         }
+
+
     }
 }

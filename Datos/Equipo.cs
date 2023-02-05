@@ -12,6 +12,5 @@ namespace Datos
         public string NombreEquipo { get; set; }
         public string Caratula { get; set; }
         public List<Jugador> Jugadores { get; set; }
-        public List<Torneo> Torneos { get; set; }
     }
 }
